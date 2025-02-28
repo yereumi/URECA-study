@@ -1,6 +1,6 @@
 -- partition by는 row들 사이에 경계선 긋기
 -- order by는 partition 내의 row들 줄 세우기
--- over는 partition과 order가 적용된 대상들을 대상으로 한다는 의미
+-- over는 partition과 order가 적용된 row들을 대상으로 한다는 의미
 -- row_number는 단순 row 번호
 select ename, job, sal, deptno
 , row_number() over(partition by deptno order by sal desc) apply_over

@@ -16,23 +16,17 @@ select curdate() from dual;
  * trunc : 소수점 이하 자릿수 자르기
  * mod : 두 수를 나누어 나머지만을 구함
  */
-select floor(0.9) from dual;
+select ceil(0.1), ceil(-0.1) from dual;
 
-select round(0.4) from dual;
+select floor(0.9), floor(-0.9) from dual;
 
-select round(0.5) from dual;
+select round(0.444), round(0.444, 1), round(0.444, 2) from dual;
 
-select ceil(0.1) from dual;
+select round(444.123), round(444.123, -1), round(444.123, -2) from dual;
 
-select truncate(0.123456789, 3) from dual;
+select round(0.555), round(0.555, 1), round(0.555, 2) from dual;
 
-select truncate(0.123456789, 5) from dual;
-
-select truncate(0.123456789, 7) from dual;
-
-select mod(49, 5) from dual;
-
-select power(5,2) from dual;
+select round(555.123), round(555.123, -1), round(555.123, -2) from dual;
 
 select deptno, avg(sal)
 , round( avg(sal), 3 )
@@ -52,6 +46,18 @@ select deptno, avg(sal)
 , round( avg(sal), -1 )
 , round( avg(sal), -2 )
 from emp group by deptno;
+
+select truncate(0.123456789, 3) from dual;
+
+select truncate(0.123456789, 5) from dual;
+
+select truncate(0.123456789, 7) from dual;
+
+select truncate(12345.6789, -3) from dual;
+
+select mod(49, 5) from dual;
+
+select pow(2, 5), power(5,2) from dual;
 
 /*
  * ascii : 문자를 숫자로
@@ -85,6 +91,7 @@ select lower('NICE TO MEET YOU') from dual;
  */
 select left('NICE TO MEET YOU',2) from dual;
 select right('NICE TO MEET YOU',2) from dual;
+select right("C:/Users/User/aaa.txt", 3);
 
 /*
  * lpad : 왼쪽 자릿수 맞추기
@@ -100,10 +107,10 @@ select rpad('hello', 10, '#') from dual;
  * ltrim : 왼쪽 공백 자르기
  * rtrim : 오른쪽 공백 자르기
  */
-select '   NICE TO MEET YOU   ' from dual;
-select trim('   NICE TO MEET YOU   ') from dual;
-select ltrim('   NICE TO MEET YOU   ') from dual;
-select rtrim('   NICE TO MEET YOU   ') from dual;
+select concat('[','   NICE TO MEET YOU   ',']') from dual;
+select concat('[',trim('   NICE TO MEET YOU   '),']') from dual;
+select concat('[',ltrim('   NICE TO MEET YOU   '),']') from dual;
+select concat('[',rtrim('   NICE TO MEET YOU   '),']') from dual;
 
 select trim('=' from '===HELLO===');
 
@@ -113,6 +120,7 @@ select trim('=' from '===HELLO===');
  */
 select replace('NICE TO MEET YOU', 'EE', 'ii') from dual;
 select replace('/NICE /TO /MEET /YOU', '/', '') from dual;
+select replace('C:/Users/User/aaa.txt', 'C:/Users/User/', '');
 
 select reverse('NICE TO MEET YOU') from dual;
 
@@ -121,7 +129,7 @@ select reverse('NICE TO MEET YOU') from dual;
  * substring : 문자열 자르기
  */
 select substr('nice to meet you', 2, 10) from dual;
-select substr('한글입니다', 2, 3) from dual;
+select substr('한글입니다', 2, 3) from dual; -- 2번지부터 3개 자르기.
 
 select substring('nice to meet you', 2, 3) from dual;
 select substring('한글입니다', 2, 3) from dual;
@@ -158,37 +166,51 @@ select LOCALTIME();
  * DATE_SUB : 날자 빼기
  * DATEDIFF : 날자 사이의 일수
  */
-select date_add('2024-07-12', interval 15 day);
-select date_add('2024-07-12', interval 5 month);
-select date_add('2024-07-12', interval 15 year);
+select date_add('2025-01-16', interval 15 day)
+, date_add('2025-01-16', interval 5 month)
+, date_add('2025-01-16', interval 1 year);
 
-select date_add('2024-07-12', interval -15 day);
-select date_add('2024-07-12', interval -5 month);
-select date_add('2024-07-12', interval -15 year);
+select date_add('2025-01-16', interval -15 day)
+, date_add('2025-01-16', interval -5 month)
+, date_add('2025-01-16', interval -1 year);
 
-select date_sub('2024-07-12', interval 15 day);
-select date_sub('2024-07-12', interval 5 month);
-select date_sub('2024-07-12', interval 15 year);
+select date_sub('2025-01-16', interval 15 day)
+, date_sub('2025-01-16', interval 5 month)
+, date_sub('2025-01-16', interval 1 year);
 
-select date_sub('2024-07-12', interval -15 day);
-select date_sub('2024-07-12', interval -5 month);
-select date_sub('2024-07-12', interval -15 year);
+select date_sub('2025-01-16', interval -15 day)
+, date_sub('2025-01-16', interval -5 month)
+, date_sub('2025-01-16', interval -1 year);
 
 SELECT DATEDIFF('2024-07-11','2024-07-01');
 SELECT DATEDIFF('2024-07-11','2024-07-31');
 
-SELECT DATE_ADD('2024-07-11 23:55:55', INTERVAL 1 SECOND);
-SELECT DATE_ADD('2024-07-11 23:55:55', INTERVAL 1 DAY);
-SELECT DATE_ADD('2024-07-11 23:55:55', INTERVAL '1:1' MINUTE_SECOND);
-SELECT DATE_SUB('2024-07-11 00:00:00', INTERVAL '1 1:1:1' DAY_SECOND);
-SELECT DATE_ADD('2024-07-11 00:00:00', INTERVAL '-1 10' DAY_HOUR);
-SELECT DATE_ADD('2024-07-11 23:59:59.000002', INTERVAL '1.999999' SECOND_MICROSECOND);
+select date_add('2025-02-27 14:25:30', interval 1 hour);
+select now(), date_add(now(), interval 1 hour);
+select now(), date_add(now(), interval -1 hour);
+select now(), date_add(now(), interval 1 minute);
+select now(), date_add(now(), interval -1 minute);
+select now(), date_add(now(), interval 1 second);
+select now(), date_add(now(), interval -1 second);
+
+select now(), date_add(now(), interval '1 2' DAY_HOUR);
+select now(), date_add(now(), interval '-1 2' DAY_HOUR);
+select now(), date_add(now(), interval '1 1:1:1' day_second);
+select now(), date_add(now(), interval '-1 1:1:1' day_second);
+select now(), date_add(now(), interval '1:1' minute_second);
+select now(), date_add(now(), interval '-1:1' minute_second);
+
+select DATE_ADD('2025-02-27 14:35:45.000003', interval '0.99' SECOND_MICROSECOND);
+select DATE_ADD('2025-02-27 14:35:45.000003', interval '-0.000002' SECOND_MICROSECOND);
 
 select ename, hiredate, date_format(hiredate, '%M-%D-%y') from emp;
 select ename, hiredate, date_format(hiredate, '%m-%d-%Y') from emp;
+
 select now(), date_format(now(), '%Y-%m-%d');
-select now(), date_format(now(), '%Y-%m-%d 24H %H:%i:%s');
+select now(), date_format(now(), '%Y-%m-%d %h:%i:%s');
 select now(), date_format(now(), '%Y-%m-%d %p %h:%i:%s');
+select now(), date_format(now(), '%Y-%m-%d %H:%i:%s');
+select now(), date_format(now(), '%Y-%m-%d 24H %H:%i:%s');
 
 insert into emp
 values (9997, '노홍철', '사회자', null

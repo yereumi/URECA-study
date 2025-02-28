@@ -210,6 +210,12 @@ select ename, job, sal from emp 직원테이블;
 select 직원테이블.ename, 직원테이블.job, 직원테이블.sal from emp 직원테이블;
 select emp.ename, emp.job, emp.sal from emp 직원테이블; /* error */
 
+select * from emp where comm = null; -- error -- null은 값이 없으므로 비교연산 불가.
+select * from emp where comm != null; -- error
+
+select * from emp where comm is null;
+select * from emp where comm is not null;
+
 select empno, ename, job, sal, comm from emp where comm is null;
 
 select empno, ename, job, sal, comm from emp where comm is not null;
@@ -217,8 +223,13 @@ select empno, ename, job, sal, comm from emp where comm is not null;
 select concat('H','E', 'L', 'L', 'O') as 인사 from dual;
 
 select concat('H', 'E', 'L', 'L', 'O') as 인사;
-select concat('H', concat('E', concat('L', concat('L', 'O')))) as 인사;
+select concat('H', concat('E', concat('L', concat('L', 'O')))) as 인사; /* oracle */
 select 'H' || 'E' || 'L' || 'L' || 'O' as 인사 from dual; /* oracle */
+
+select * from emp where deptno = 30 and job = 'SALESMAN'
+and comm is not null and HIREDATE <= '1981-09-01' and ename > 'S'; -- and 개괄
+
+select * from emp where deptno = 30 or job = 'MANAGER' or sal <= 1600; -- or 개괄
 
 select empno, ename, job, sal, deptno from emp where deptno = 30;
 
@@ -345,7 +356,7 @@ where job = 'MANAGER';--error
 select empno, ename, job, hiredate, sal, comm, deptno from emp
 where deptno = 30
 union -- union all
-select empno, empno, job, hiredate, sal, comm, deptno from emp
+select empno, hiredate, sal, empno, job, comm, deptno from emp
 where job = 'MANAGER';--error
 
 select empno, ename from emp
