@@ -1,3 +1,14 @@
+/* main query - 기본 쿼리
+   sub query (부속 질의) - 쿼리 내부의 또 다른 쿼리
+   상관부속질의 - main query와 sub query가 상호 관계를 갖는 경우 */
+select ename, job, deptno
+, (select dname from dept where deptno = 10)
+from emp where deptno = 10;
+
+select e.ename, e.job, e.deptno
+, (select d.dname from dept d where e.deptno = d.deptno)
+from emp e;
+
 /*
  * subquery
  * - query 내부에 또 query가 있는 경우
@@ -50,6 +61,16 @@ where deptno in (select deptno from dept);
 /*
  * 상관부속질의에서 다중행 서브쿼리 표현들 : in, not in, exists, not exists, all, any(=some)
  */
+select * from dept;
+
+select distinct deptno from emp;
+
+select * from dept d
+where deptno in (select deptno from emp e where e.deptno = d.deptno);
+
+select * from dept d
+where deptno not in (select deptno from emp e where e.deptno = d.deptno);
+
 select * from dept d
 where exists (select * from emp e where e.deptno = d.deptno);
 
@@ -85,7 +106,17 @@ where sal < any(select hisal from salgrade);
 create table emp2
 as select * from emp;
 
-create table emp_for_30 as select * from emp where deptno = 30;
+create table emp21
+as select empno, ename, job, sal, deptno from emp;
+
+create table emp_for_30
+as select * from emp where deptno = 30;
+
+create table emp22
+as
+select e.empno, e.ename, e.job, e.sal, e.deptno, d.dname
+from emp e, dept d
+where e.deptno = d.deptno;
 
 /*
  * 서브 쿼리를 이용한 테이블 복제 (내용 불포함, 테이블 구조만 복제)
@@ -95,10 +126,20 @@ as select * from emp where 1 = 2;
 
 create table emp_empty as select * from emp where 1 = 2;
 
+create table emp21
+as select empno, ename, job, sal, deptno from emp where 1 = 2;
+
+create table emp32
+as select e.empno, e.ename, e.job, e.deptno, d.dname
+from emp e, dept d
+where e.deptno = d.deptno and 1 = 2;
+
+drop table emp21;
+drop table emp22;
 drop table emp3;
-
+drop table emp31;
+drop table emp32;
 drop table emp_empty;
-
 drop table emp_for_30;
 
 /*

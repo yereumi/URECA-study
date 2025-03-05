@@ -6,13 +6,21 @@ drop table emp3;
 create table emp3
 as select * from emp;
 
+select @@sql_safe_updates;
+
+SET SQL_SAFE_UPDATES = 0;
+
+select @@sql_safe_updates;
+
 /*
  * create view
+ * - 뷰는 물리적인 테이블이 아닌 가상의 테이블
+ * - 뷰는 select문으로 만들어져 있다.
  * - create view [뷰이름] as [서브쿼리]
  * - 뷰는 테이블처럼 select, insert, update, delete 가능
- * - 물리적인 테이블이 아닌 가상의 테이블
  * - 뷰에서 수행되는 select, insert, update, delete는
  *   사실은 뷰가 대표하는 테이블 또는 뷰가 만들어진 기초 테이블에서 수행됨
+ * - join으로 만들어진 뷰는 insert, delete 불가능
  */
 drop view view_emp30;
 
@@ -29,7 +37,7 @@ select * from view_emp30;
  */
 create or replace view view_emp30
 as
-select * from emp3 where deptno = 20;
+select * from emp3 where deptno = 30;
 
 select * from view_emp30;
 
@@ -37,12 +45,12 @@ select * from view_emp30;
  * 뷰를 사용한 insert는 뷰의 기초 테이블에 data가 입력됨
  */
 insert into view_emp30
-values(1111, '김태희', '배우', null, CURDATE(), 100, 10000, 20);
+values(1111, '김태희', '배우', null, CURDATE(), 100, 10000, 30);
 
 select * from view_emp30;
 
 insert into view_emp30
-values(1112, '원빈', '배우', null, CURDATE(), 500, 5000, 30);
+values(1112, '원빈', '배우', null, CURDATE(), 500, 5000, 20);
 
 select * from view_emp30;
 
@@ -57,13 +65,13 @@ set sql_safe_updates = 0;
 
 select @@sql_safe_updates;
 
-update view_emp30 set deptno = 20
-where ename = '원빈'; -- error는 아니나, data 변경 안됨.
+update view_emp30 set deptno = 10
+where empno = 1112; -- error는 아니나, data 변경 안됨.
 
 select * from emp3;
 
-update view_emp30 set deptno = 30
-where ename = '김태희';
+update view_emp30 set ename = '김태희짱'
+where empno = 1111;
 
 select * from view_emp30;
 
@@ -78,14 +86,14 @@ select @@sql_safe_updates;
  * - 뷰를 만든 select문의 where 조건절의 속성은 update 불가
  */
 insert into view_emp30
-values(1113, '아이유', '가수', null, curdate(), 500, 5000, 20);
+values(1113, '아이유', '가수', null, curdate(), 500, 5000, 30);
 
 select * from view_emp30;
 
 create or replace view view_emp30
 as
 select * from emp3
-where deptno = 20 with check option;
+where deptno = 30 with check option;
 
 select @@sql_safe_updates;
 
@@ -93,7 +101,7 @@ set sql_safe_updates = 0;
 
 select @@sql_safe_updates;
 
-update view_emp30 set deptno = 30
+update view_emp30 set deptno = 10
 where ename = '아이유'; -- error
 
 set sql_safe_updates = 1;
